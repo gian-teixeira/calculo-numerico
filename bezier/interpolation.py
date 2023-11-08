@@ -48,6 +48,5 @@ def bezier(P, step):
     A, B = bezier_interpolate(P)
     gamma = [ cubic_bezier(P[i], A[i], B[i], P[i + 1])
               for i in range(len(P) - 1) ]
-    print(gamma)
     bezier = np.array([g(t) for g in gamma for t in np.linspace(0,1,step)])
     return bezier, A, B
