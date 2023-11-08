@@ -21,7 +21,6 @@ def draw(extra = None):
         path, A, B = bezier(POINTS,50)
         px, py = path[:,0], path[:,1]
         plt.plot(px, py, 'b-')
-        #A,B = bezier_interpolate(POINTS)
         for i in range(len(A)):
             plt.plot([A[i][0],POINTS[i][0]], [A[i][1],POINTS[i][1]], 'b-')
             plt.plot([B[i][0],POINTS[i+1][0]], [B[i][1],POINTS[i+1][1]], 'b-')

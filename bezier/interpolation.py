@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import linear
 from scipy.linalg import solveh_banded
 import copy
 
@@ -42,25 +41,13 @@ def bezier_interpolate(points):
 
     return A,B
 
-def get_cubic(a, b, c, d):
-    return lambda t: np.power(1 - t, 3) * a + 3 * np.power(1 - t, 2) * \
-        t * b + 3 * (1 - t) * np.power(t, 2) * c + np.power(t, 3) * d
+def cubic_bezier(p0, a, b, p1):
+    return lambda t: np.power(1-t,3)*p0 + 3*t*np.power(1-t,2)*a + 3*(1-t)*np.power(t,2)*b + np.power(t,3)*p1
 
-# return one cubic curve for each consecutive points
-def get_bezier_cubic(points):
-    A, B = bezier_interpolate(points)
-    return [ get_cubic(points[i], A[i], B[i], points[i + 1])
-             for i in range(len(points) - 1) ]
-
-# evalute each cubic curve on the range [0, 1] sliced in n points
-def evaluate_bezier(points, n):
-    if len(points) < 3 : return
-    curves = get_bezier_cubic(points)
-    return np.array([fun(t) for fun in curves for t in np.linspace(0, 1, n)])
-
-def bezier(points, step):
-    if len(points) < 3: return
-    A, B = bezier_interpolate(points)
-    curve_slices = get_bezier_cubic(points)
-    curve = np.array([fun(t) for fun in curve_slices for t in np.linspace(0, 1, step)])
-    return curve, A, B
+def bezier(P, step):
+    A, B = bezier_interpolate(P)
+    gamma = [ cubic_bezier(P[i], A[i], B[i], P[i + 1])
+              for i in range(len(P) - 1) ]
+    print(gamma)
+    bezier = np.array([g(t) for g in gamma for t in np.linspace(0,1,step)])
+    return bezier, A, B
